@@ -1,22 +1,32 @@
 import os
-import click
 import discord
+import asyncio
+from kirkbot import tasks
 
-intents = discord.Intents.default()
-intents.message_content = True
 
-client = discord.Client(intents=intents)
+class MyClient(discord.Client):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-@client.event
-async def on_ready():
-    print(f'We have logged in as {client.user}')
+    async def setup_hook(self) -> None:
+        # create the background task and run it in the background
+        self.bg_task = self.loop.create_task(self.my_background_task())
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+    async def on_ready(self):
+        print(f'Logged in as {self.user} (ID: {self.user.id})')
+        print('------')
 
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+    async def my_background_task(self):
+        await self.wait_until_ready()
+        channel = self.get_channel(1325041137219538998)  # channel ID goes here
+        while not self.is_closed():
+            msg = tasks.task_alert_root_disk_usage()
 
+            if msg:
+                await channel.send(msg)
+
+            await asyncio.sleep(300)
+
+
+client = MyClient(intents=discord.Intents.default())
 client.run(os.getenv('DISCORD_TOKEN'))
