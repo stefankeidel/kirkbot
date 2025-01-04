@@ -8,12 +8,22 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.13"
+click = "^8.1.8"
 
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.5"
 pudb = "^2024.1.3"
 ipython = "^8.31.0"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+
+[tool.poetry.group.test]
+optional = true
 
 [build-system]
 requires = ["poetry-core"]
