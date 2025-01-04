@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "kirkbot"
+version = "0.1.0"
+description = "Messing around with Discord bot stuff"
+authors = ["Stefan <1188614+stefankeidel@users.noreply.github.com>"]
+license = "APL"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.5"
+pudb = "^2024.1.3"
+ipython = "^8.31.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
