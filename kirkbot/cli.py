@@ -1,11 +1,22 @@
+import os
 import click
+import discord
 
-@click.command()
-@click.option('--count', default=1, help='Number of greetings.')
-def hello(count):
-    """Simple program that greets NAME for a total of COUNT times."""
-    for x in range(count):
-        click.echo(f"Hello world!")
+intents = discord.Intents.default()
+intents.message_content = True
 
-if __name__ == '__main__':
-    hello()
+client = discord.Client(intents=intents)
+
+@client.event
+async def on_ready():
+    print(f'We have logged in as {client.user}')
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    if message.content.startswith('$hello'):
+        await message.channel.send('Hello!')
+
+client.run(os.getenv('DISCORD_TOKEN'))
