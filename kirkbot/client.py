@@ -21,6 +21,7 @@ class KirkBotClient(discord.Client):
 
         task_list = [
             tasks.AlertRootDiskUsage(channel),
+            tasks.AlertTailscaleKeyExpiration(channel),
         ]
 
         while not self.is_closed():
