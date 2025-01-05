@@ -3,6 +3,7 @@ import psutil
 import abc
 import subprocess
 import json
+from glom import glom
 from datetime import datetime, timedelta
 
 
@@ -49,9 +50,13 @@ class AlertTailscaleKeyExpiration(Task):
             data = json.loads(result.stdout)
             now = datetime.utcnow()
 
+            # devices, including self -- weird structure in JSON
+            devices = glom(data, 'Peer') # type: ignore
+            devices['self'] = glom(data, 'Self') # type: ignore
+
             # Check for key expiry in the output
             # if less than one month, then alert
-            for device in data.get("Peer", {}).values():
+            for device in devices.values():
                 if "KeyExpiry" in device:
                     expiry_date = datetime.strptime(device["KeyExpiry"], "%Y-%m-%dT%H:%M:%SZ")
 
