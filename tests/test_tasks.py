@@ -1,4 +1,4 @@
-from kirkbot.tasks import task_alert_root_disk_usage
+from kirkbot.tasks import AlertRootDiskUsage
 
 def test_disk_usage():
     assert True
