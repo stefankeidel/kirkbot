@@ -1,7 +1,7 @@
 import os
 import discord
 import asyncio
-from kirkbot import tasks
+from kirkbot import tasks, constants
 
 
 class MyClient(discord.Client):
@@ -14,11 +14,10 @@ class MyClient(discord.Client):
 
     async def on_ready(self):
         print(f'Logged in as {self.user} (ID: {self.user.id})')
-        print('------')
 
     async def my_background_task(self):
         await self.wait_until_ready()
-        channel = self.get_channel(1325041137219538998)  # channel ID goes here
+        channel = self.get_channel(constants.CHANNEL_ID)
         while not self.is_closed():
             msg = tasks.task_alert_root_disk_usage()
 
