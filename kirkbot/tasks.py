@@ -14,7 +14,7 @@ class Task(abc.ABC):
     ):
         self.channel = channel
         self.hostname = os.uname().nodename
-    
+
     @abc.abstractmethod
     async def run(self) -> None:
         pass
@@ -37,8 +37,8 @@ class AlertTailscaleKeyExpiration(Task):
         try:
             # Run the Tailscale CLI command to get status
             result = subprocess.run(
-                ["/run/current-system/sw/bin/tailscale", "status", "--json"], 
-                capture_output=True, 
+                ["/run/current-system/sw/bin/tailscale", "status", "--json"],
+                capture_output=True,
                 text=True
             )
 
@@ -69,7 +69,7 @@ class AlertTailscaleKeyExpiration(Task):
                             f"🔑*Tailscale Key Expiry Alert from {self.hostname}*\n"
                             f"Device: **{device['HostName']}**, Key Expiry: **{device['KeyExpiry']}** in **{time_difference.days}** days\n"
                         ))
-                else:
-                    await self.channel.send(f"Device: {device['HostName']} has no key expiry information.")
+                # else:
+                #     await self.channel.send(f"Device: {device['HostName']} has no key expiry information.")
         except Exception as e:
             await self.channel.send(f"Error getting tailscale info: {e}")
